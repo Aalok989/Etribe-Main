@@ -606,23 +606,58 @@ export default function MemberDetail() {
         allPayments = response.data;
       }
 
-      // Filter payments for the specific member with strict matching
-      const memberPayments = allPayments.filter(payment => {
-        const paymentName = (payment.pname || payment.name || '').trim().toLowerCase();
-        const paymentCompany = (payment.company_name || payment.company || '').trim().toLowerCase();
-        const memberName = (member?.name || '').trim().toLowerCase();
-        const memberCompany = (member?.company_name || member?.company || '').trim().toLowerCase();
-        
-        // Additional check: if we have member ID in payment data, use that for exact matching
-        const memberIdMatch = payment.member_id === memberId || 
-                             payment.user_id === memberId ||
-                             payment.company_detail_id === member?.company_detail_id ||
-                             payment.user_detail_id === member?.user_detail_id;
-        
-        // Strict filtering: require exact matches or ID matches
-        return memberIdMatch || (paymentName === memberName && paymentCompany === memberCompany);
+      console.log('🔍 Filtering payments for member:', {
+        memberId,
+        memberName: member?.name,
+        memberEmail: member?.email,
+        memberCompany: member?.company_name || member?.company,
+        totalPayments: allPayments.length
       });
+      
+      // Debug: Log the first few payments to see available fields
+      if (allPayments.length > 0) {
+        console.log('📋 Sample payment data structure:', allPayments[0]);
+        console.log('🔑 Member ID fields available:', {
+          memberId,
+          memberCompanyDetailId: member?.company_detail_id,
+          memberUserId: member?.user_detail_id
+        });
+        
+        // Debug: Check what email-related fields exist in payments
+        const firstPayment = allPayments[0];
+        console.log('📧 Payment email fields check:', {
+          email: firstPayment.email,
+          pemail: firstPayment.pemail,
+          user_email: firstPayment.user_email,
+          member_email: firstPayment.member_email,
+          contact_email: firstPayment.contact_email
+        });
+        
+        // Debug: Check member email
+        console.log('👤 Member email:', member?.email);
+      }
 
+      // Filter payments for the specific member using COMPANY DETAIL ID MATCHING
+      const memberPayments = allPayments.filter(payment => {
+        // Match payments by company_detail_id
+        const paymentCompanyId = String(payment.company_id || '');
+        const memberCompanyDetailId = String(member?.company_detail_id || '');
+        
+        if (paymentCompanyId && memberCompanyDetailId && paymentCompanyId === memberCompanyDetailId) {
+          console.log('✅ Payment matched by company ID:', payment.id, 'Company ID:', paymentCompanyId);
+          return true;
+        }
+        
+                return false;
+      });
+      
+      console.log('✅ Filtered payments result:', {
+        totalPayments: allPayments.length,
+        filteredPayments: memberPayments.length,
+        memberId,
+        memberName: member?.name
+      });
+      
       // Map the filtered payments to the expected format
       const mappedPayments = memberPayments.map((payment, index) => ({
         id: payment.id || index + 1,
@@ -651,16 +686,7 @@ export default function MemberDetail() {
       // Fetch bank details from dedicated API endpoint
       fetchBankDetails();
       
-      // Extract unique bank names from all payments
-      const uniqueBankNames = [...new Set(allPayments
-        .map(payment => payment.bank_name || payment.name || '')
-        .filter(bank => bank && bank.trim() !== ''))];
-      
-      // Set bank names from real-time data
-      setBankNames(uniqueBankNames);
-      
       console.log('Member payments:', mappedPayments);
-      console.log('Bank names:', uniqueBankNames);
       console.log('Filtering details:', {
         memberName: member?.name,
         memberCompany: member?.company_name || member?.company,
@@ -668,6 +694,37 @@ export default function MemberDetail() {
         totalPayments: allPayments.length,
         filteredPayments: mappedPayments.length
       });
+      
+      // Extract unique bank names from all payments
+      const uniqueBankNames = [...new Set(allPayments
+        .map(payment => payment.bank_name || payment.name || '')
+        .filter(bank => bank && bank.trim() !== ''))];
+      
+      // Set bank names with default options and real-time data
+      setBankNames([
+        'Au Small Finance Bank Limited',
+        'State Bank of India',
+        'HDFC Bank',
+        'ICICI Bank',
+        'Axis Bank',
+        'Punjab National Bank',
+        'Bank of Baroda',
+        'Canara Bank',
+        'Union Bank of India',
+        'Bank of India',
+        ...uniqueBankNames.filter(bank => ![
+          'Au Small Finance Bank Limited',
+          'State Bank of India',
+          'HDFC Bank',
+          'ICICI Bank',
+          'Axis Bank',
+          'Punjab National Bank',
+          'Bank of Baroda',
+          'Canara Bank',
+          'Union Bank of India',
+          'Bank of India'
+        ].includes(bank))
+      ]);
       
     } catch (error) {
       console.error('Fetch payments error:', error);

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axiosConfig'; // Import custom Axios instance
 import { getApiHeaders, getAuthHeaders } from '../../utils/apiHeaders';
-import logo from '../../assets/logos/company-logo.png';
+import logo from '../../assets/Etribe-logo.jpg';
+import bgImage from '../../assets/images/bg-login.jpg';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,8 +11,8 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [bgImage, setBgImage] = useState('');
-  const [imageLoaded, setImageLoaded] = useState(false);
+
+
   const [regForm, setRegForm] = useState({
     name: '',
     contact: '',
@@ -120,22 +121,7 @@ const Login = () => {
     fetchCountries();
   }, []);
 
-  // Lazy load background image for better performance
-  useEffect(() => {
-    const loadBackgroundImage = async () => {
-      try {
-        const imageModule = await import('../../assets/images/bg-login.jpg');
-        setBgImage(imageModule.default);
-        setImageLoaded(true);
-      } catch (error) {
-        console.error('Failed to load background image:', error);
-        // Fallback to a solid color if image fails to load
-        setImageLoaded(true);
-      }
-    };
-    
-    loadBackgroundImage();
-  }, []);
+
 
   // Password validation function
   const validatePassword = (password) => {
@@ -338,6 +324,19 @@ const Login = () => {
     if (regError) setRegError('');
   };
 
+  // Clear any dark theme classes when login page loads
+  useEffect(() => {
+    // Remove dark theme classes from document
+    document.documentElement.classList.remove('dark');
+    document.body.classList.remove('dark');
+    
+    // Also remove from any parent containers
+    const containers = document.querySelectorAll('.dark');
+    containers.forEach(container => {
+      container.classList.remove('dark');
+    });
+  }, []);
+
   // Use useEffect for navigation
   useEffect(() => {
     if (redirect) {
@@ -351,13 +350,8 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center relative overflow-hidden font-poppins"
-      style={{ 
-        backgroundImage: imageLoaded && bgImage ? `url(${bgImage})` : 'none',
-        backgroundColor: !imageLoaded || !bgImage ? '#f3f4f6' : 'transparent',
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center' 
-      }}
+      className="min-h-screen flex items-center justify-center relative overflow-hidden font-poppins login-page"
+      style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className="relative z-10 w-full max-w-md p-8 bg-white/95 rounded-2xl shadow-2xl">
         <div className="flex flex-col items-center mb-6">
@@ -374,9 +368,14 @@ const Login = () => {
                 name="email" 
                 type="email" 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white text-primary-dark" 
                 placeholder="Enter your email"
                 aria-describedby="login-email-error"
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: '#d1d5db',
+                  color: '#1e40af'
+                }}
               />
             </div>
             <div>
@@ -386,9 +385,14 @@ const Login = () => {
                 name="password" 
                 type="password" 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white text-primary-dark" 
                 placeholder="Enter your password"
                 aria-describedby="login-password-error"
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: '#d1d5db',
+                  color: '#1e40af'
+                }}
               />
             </div>
             <button 
@@ -411,7 +415,7 @@ const Login = () => {
                 value={regForm.name || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your name"
                 aria-describedby="reg-name-error"
               />
@@ -425,7 +429,7 @@ const Login = () => {
                 onChange={handleRegChange} 
                 type="tel"
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your contact number"
                 aria-describedby="reg-contact-error"
               />
@@ -439,7 +443,7 @@ const Login = () => {
                 onChange={handleRegChange} 
                 type="email" 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your email"
                 aria-describedby="reg-email-error"
               />
@@ -454,7 +458,7 @@ const Login = () => {
                   onChange={handleRegChange} 
                   type="password" 
                   required 
-                  className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                   placeholder="Password"
                   aria-describedby="reg-password-error"
                 />
@@ -468,7 +472,7 @@ const Login = () => {
                   onChange={handleRegChange} 
                   type="password" 
                   required 
-                  className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                   placeholder="Confirm Password"
                   aria-describedby="reg-confirm-password-error"
                 />
@@ -482,7 +486,7 @@ const Login = () => {
                 value={regForm.address || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your address"
                 aria-describedby="reg-address-error"
               />
@@ -495,7 +499,7 @@ const Login = () => {
                 value={regForm.country || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark"
                 aria-describedby="reg-country-error"
                 disabled={loadingCountries}
               >
@@ -513,7 +517,7 @@ const Login = () => {
                 value={regForm.state || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark"
                 aria-describedby="reg-state-error"
                 disabled={loadingStates || !regForm.country}
               >
@@ -534,7 +538,7 @@ const Login = () => {
                 value={regForm.district || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your district"
                 aria-describedby="reg-district-error"
               />
@@ -547,7 +551,7 @@ const Login = () => {
                 value={regForm.city || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your city"
                 aria-describedby="reg-city-error"
               />
@@ -560,7 +564,7 @@ const Login = () => {
                 value={regForm.pincode || ''} 
                 onChange={handleRegChange} 
                 required 
-                className="w-full px-4 py-2 border border-primary-light rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white/80 text-primary-dark" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-primary-dark" 
                 placeholder="Enter your pincode"
                 aria-describedby="reg-pincode-error"
               />
