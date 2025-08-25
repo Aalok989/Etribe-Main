@@ -438,7 +438,7 @@ export default function AllEvents() {
   // Attendance functions
   const handleMarkAttendance = (eventId, eventName) => {
     // Navigate to Attendance page with event ID and name
-    navigate(`/event-management/attendance?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
+    navigate(`/admin/attendance?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
   };
 
   const handleUploadAttendance = (eventId) => {
@@ -719,6 +719,7 @@ export default function AllEvents() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
               <button
+                type="button"
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 onClick={handleHideAddEventForm}
                 title="Close"
@@ -1016,9 +1017,14 @@ export default function AllEvents() {
                     <td className="p-3 text-left border-r border-gray-200 dark:border-gray-700">
                       <div
                         className="text-sm text-gray-800 dark:text-gray-100 max-w-xs truncate"
-                        title={event.agenda.replace(/<[^>]+>/g, "")}
-                      >
-                        {event.agenda.replace(/<[^>]+>/g, "").slice(0, 50)}...
+                                            title={event.agenda.replace(/<[^>]+>/g, "")}
+                  >
+                    <div
+                      className="line-clamp-2"
+                      dangerouslySetInnerHTML={{
+                        __html: event.agenda,
+                      }}
+                    />
                       </div>
                     </td>
                     <td className="p-3 text-left border-r border-gray-200 dark:border-gray-700">
@@ -1106,9 +1112,14 @@ export default function AllEvents() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Agenda:</span>
-                    <span className="text-gray-800 dark:text-gray-100 max-w-xs truncate" title={event.agenda.replace(/<[^>]+>/g, "")}>
-                      {event.agenda.replace(/<[^>]+>/g, "").slice(0, 50)}...
-                    </span>
+                    <div className="text-gray-800 dark:text-gray-100 max-w-xs truncate" title={event.agenda.replace(/<[^>]+>/g, "")}>
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: event.agenda,
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Venue:</span>
@@ -1382,6 +1393,7 @@ export default function AllEvents() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-lg mx-4 relative">
               <button
+                type="button"
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 onClick={closeViewEventModal}
                 title="Close"
@@ -1479,6 +1491,7 @@ export default function AllEvents() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
               <button
+                type="button"
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 onClick={closeEditEventModal}
                 title="Close"

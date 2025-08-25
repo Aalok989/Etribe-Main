@@ -510,8 +510,15 @@ export default function PastEvents() {
 
   // Attendance functions
   const handleMarkAttendance = (eventId, eventName) => {
+    console.log('Marking attendance for event:', { eventId, eventName });
+    
+    if (!eventId) {
+      toast.error('Event ID is missing. Cannot mark attendance.');
+      return;
+    }
+    
     // Navigate to Attendance page with event ID and name
-    navigate(`/event-management/attendance?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
+    navigate(`/admin/attendance?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
   };
 
   const handleUploadAttendance = (eventId) => {
@@ -709,7 +716,14 @@ export default function PastEvents() {
                         <span className="font-medium text-gray-800 dark:text-gray-100">{event.event}</span>
                       </div>
                     </td>
-                    <td className="p-3 text-left border-r border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100">{stripHtml(event.agenda)}</td>
+                    <td className="p-3 text-left border-r border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100">
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: event.agenda,
+                        }}
+                      />
+                    </td>
                     <td className="p-3 text-left border-r border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                           <FiMapPin className="mr-1" />
@@ -789,9 +803,14 @@ export default function PastEvents() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Agenda:</span>
-                    <span className="text-gray-800 dark:text-gray-100 max-w-xs truncate" title={stripHtml(event.agenda)}>
-                      {stripHtml(event.agenda).slice(0, 50)}...
-                    </span>
+                    <div className="text-gray-800 dark:text-gray-100 max-w-xs truncate" title={stripHtml(event.agenda)}>
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: event.agenda,
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500 dark:text-gray-400">Venue:</span>
@@ -898,6 +917,7 @@ export default function PastEvents() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
               <button
+                type="button"
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 onClick={handleHideAddEventForm}
                 title="Close"
@@ -1055,6 +1075,7 @@ export default function PastEvents() {
            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
                <button
+                 type="button"
                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                  onClick={closeEditEventModal}
                  title="Close"
@@ -1247,6 +1268,7 @@ export default function PastEvents() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-lg mx-4 relative">
               <button
+                type="button"
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 onClick={closeViewEventModal}
                 title="Close"

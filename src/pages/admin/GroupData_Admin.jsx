@@ -511,9 +511,13 @@ function GroupDataContent() {
                       />
                     </div>
             <div className="text-center">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-2">{data.name}</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+              {editMode ? form.name : data.name}
+            </h2>
             <div className="text-sm text-gray-500 dark:text-gray-300 font-medium">{data.signatureDesignation || 'Administrator'}</div>
-            <div className="text-sm text-gray-400 dark:text-gray-400">{data.email}</div>
+            <div className="text-sm text-gray-400 dark:text-gray-400">
+              {editMode ? form.email : data.email}
+            </div>
             <span className="text-xs text-gray-400 dark:text-gray-400 italic mt-1 block">{data.signatureName}, {data.signatureDesignation}</span>
             </div>
                   </div>
@@ -543,12 +547,14 @@ function GroupDataContent() {
             <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl">
                 <tbody>
                   {[
+                    { label: 'Name', key: 'name' },
+                    { label: 'Email', key: 'email' },
                     { label: 'Contact No', key: 'contact' },
                     { label: 'Address', key: 'address' },
                     { label: 'City', key: 'city' },
                     { label: 'Pincode', key: 'pincode' },
                     { label: 'Country', key: 'country' },
-                  { label: 'State', key: 'state' },
+                    { label: 'State', key: 'state' },
                     { label: 'Signature Name', key: 'signatureName' },
                     { label: 'Signature Designation', key: 'signatureDesignation' },
                   ].map(({ label, key }) => (

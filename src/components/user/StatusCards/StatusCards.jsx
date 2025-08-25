@@ -18,7 +18,7 @@ export default function StatusCards() {
       count: activeCount, // Real value
       gradient: "bg-gradient-to-br from-emerald-200 via-green-100 to-white dark:from-emerald-800 dark:via-green-900 dark:to-gray-800",
       icon: <FiUserCheck size={32} className="text-blue-600 dark:text-emerald-300 opacity-80" />, // Adjust icon color for contrast
-              path: "/user/member-detail/me",
+      path: "/user/ptfi-members",
     },
     {
       label: "Enquiry Received",
@@ -45,7 +45,7 @@ export default function StatusCards() {
             `relative rounded-2xl shadow-lg h-32 p-4 flex flex-col items-center justify-center gap-2 overflow-hidden transition-transform duration-200 hover:scale-105 cursor-pointer ${status.gradient} dark:shadow-gray-900 border border-gray-200 dark:border-gray-700`
           }
           onClick={() => navigate(status.path)}
-          title={`Go to ${status.label} Members`}
+          title={`Go to ${status.label === "Active" ? "PTFI" : status.label} Members`}
         >
           {/* Glassmorphism overlay */}
           <div className="absolute inset-0 bg-white/30 dark:bg-gray-700/40 backdrop-blur-md border border-white/30 dark:border-gray-700 rounded-2xl pointer-events-none" />

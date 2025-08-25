@@ -967,7 +967,7 @@ export default function PendingApproval() {
                         <button
                           className="text-indigo-600 dark:text-indigo-300 hover:text-indigo-900 p-1 rounded-full hover:bg-indigo-100 dark:hover:bg-gray-700 transition-colors"
                           title="View Member"
-                          onClick={() => navigate(`/member/${m.id || m.user_detail_id || m.company_detail_id}`)}
+                          onClick={() => navigate(`/admin/member-detail/${m.id || m.user_detail_id || m.company_detail_id}`)}
                         >
                           <FiEye size={16} />
                         </button>
@@ -1006,7 +1006,7 @@ export default function PendingApproval() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 transition-colors p-1"
-                      onClick={() => navigate(`/member/${m.id || m.user_detail_id || m.company_detail_id}`)}
+                      onClick={() => navigate(`/admin/member-detail/${m.id || m.user_detail_id || m.company_detail_id}`)}
                       title="View Member"
                     >
                       <FiEye size={16} />

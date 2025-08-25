@@ -14,18 +14,19 @@ export default function DashboardLayout({ children }) {
         // Always collapsed by default, expand only on user action
         collapsed ? 'pl-0 lg:pl-20' : 'pl-0 lg:pl-72'
       }`}>
-        {/* TopBar and content centered */}
-        <div className="max-w-7xl mx-auto w-full px-4 pt-8 flex flex-col flex-1">
-          <div className="mt-4">
+        {/* TopBar with separate padding */}
+        <div className="max-w-7xl mx-auto w-full px-4 pt-10 mb-2">
           <TopBar />
-          </div>
-          <div className="flex-1 py-4">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+        </div>
+        
+        {/* Main content area with separate padding */}
+        <div className="max-w-7xl mx-auto w-full px-4 flex-1 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6">
             {children}
-            </div>
           </div>
         </div>
-        {/* Footer */}
+        
+        {/* Footer with separate padding */}
         <div className="max-w-7xl mx-auto w-full px-4 pb-4 mb-4">
           <Footer />
         </div>

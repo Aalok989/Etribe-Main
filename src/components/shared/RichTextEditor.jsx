@@ -86,6 +86,7 @@ const RichTextEditor = ({
       <div className="bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap gap-1">
         {/* Text Formatting */}
         <button
+          type="button"
           onClick={toggleBold}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-200' : ''}`}
           title="Bold"
@@ -94,6 +95,7 @@ const RichTextEditor = ({
           <strong>B</strong>
         </button>
         <button
+          type="button"
           onClick={toggleItalic}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-200' : ''}`}
           title="Italic"
@@ -102,6 +104,7 @@ const RichTextEditor = ({
           <em>I</em>
         </button>
         <button
+          type="button"
           onClick={toggleUnderline}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-200' : ''}`}
           title="Underline"
@@ -110,6 +113,7 @@ const RichTextEditor = ({
           <u>U</u>
         </button>
         <button
+          type="button"
           onClick={toggleStrike}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('strike') ? 'bg-blue-200' : ''}`}
           title="Strikethrough"
@@ -118,6 +122,7 @@ const RichTextEditor = ({
           <s>S</s>
         </button>
         <button
+          type="button"
           onClick={toggleHighlight}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('highlight') ? 'bg-blue-200' : ''}`}
           title="Highlight"
@@ -130,6 +135,7 @@ const RichTextEditor = ({
 
         {/* Headings */}
         <button
+          type="button"
           onClick={() => setHeading(1)}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 1 }) ? 'bg-blue-200' : ''}`}
           title="Heading 1"
@@ -138,6 +144,7 @@ const RichTextEditor = ({
           H1
         </button>
         <button
+          type="button"
           onClick={() => setHeading(2)}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-200' : ''}`}
           title="Heading 2"
@@ -146,6 +153,7 @@ const RichTextEditor = ({
           H2
         </button>
         <button
+          type="button"
           onClick={() => setHeading(3)}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-200' : ''}`}
           title="Heading 3"
@@ -158,6 +166,7 @@ const RichTextEditor = ({
 
         {/* Lists */}
         <button
+          type="button"
           onClick={toggleBulletList}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-200' : ''}`}
           title="Bullet List"
@@ -166,6 +175,7 @@ const RichTextEditor = ({
           •
         </button>
         <button
+          type="button"
           onClick={toggleOrderedList}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-200' : ''}`}
           title="Numbered List"
@@ -174,6 +184,7 @@ const RichTextEditor = ({
           1.
         </button>
         <button
+          type="button"
           onClick={toggleBlockquote}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('blockquote') ? 'bg-blue-200' : ''}`}
           title="Quote"
@@ -186,6 +197,7 @@ const RichTextEditor = ({
 
         {/* Alignment */}
         <button
+          type="button"
           onClick={() => setTextAlign('left')}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-200' : ''}`}
           title="Align Left"
@@ -194,6 +206,7 @@ const RichTextEditor = ({
           ⬅
         </button>
         <button
+          type="button"
           onClick={() => setTextAlign('center')}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-200' : ''}`}
           title="Align Center"
@@ -202,6 +215,7 @@ const RichTextEditor = ({
           ↔
         </button>
         <button
+          type="button"
           onClick={() => setTextAlign('right')}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-200' : ''}`}
           title="Align Right"
@@ -214,6 +228,7 @@ const RichTextEditor = ({
 
         {/* Link */}
         <button
+          type="button"
           onClick={setLink}
           className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-200' : ''}`}
           title="Insert Link"

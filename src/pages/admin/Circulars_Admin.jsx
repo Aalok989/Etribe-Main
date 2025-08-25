@@ -319,79 +319,36 @@ export default function Circulars() {
         return;
       }
       
-      // Check file extension to determine how to handle it
-      const fileExtension = filePath.split('.').pop()?.toLowerCase();
-      console.log("File extension:", fileExtension);
-      
-      if (fileExtension === 'pdf') {
-        // For PDF files, try to open in new tab with authentication
-        try {
-          const response = await fetch(fileUrl, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Client-Service': import.meta.env.VITE_CLIENT_SERVICE || 'COHAPPRT',
-              'Auth-Key': import.meta.env.VITE_AUTH_KEY || '4F21zrjoAASqz25690Zpqf67UyY',
-              'uid': uid,
-              'token': token,
-              'rurl': import.meta.env.VITE_RURL || 'etribes.ezcrm.site'
-            }
-          });
-          
-          if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            window.open(url, '_blank');
-            toast.success("Opening PDF circular...");
-          } else {
-            console.error("Failed to fetch PDF:", response.status);
-            // Fallback to direct URL
-            window.open(fileUrl, '_blank');
-            toast.success("Opening PDF circular...");
+      // For images, open in new tab
+      try {
+        const response = await fetch(fileUrl, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Client-Service': import.meta.env.VITE_CLIENT_SERVICE || 'COHAPPRT',
+            'Auth-Key': import.meta.env.VITE_AUTH_KEY || '4F21zrjoAASqz25690Zpqf67UyY',
+            'uid': uid,
+            'token': token,
+            'rurl': import.meta.env.VITE_RURL || 'etribes.ezcrm.site'
           }
-        } catch (error) {
-          console.error("Error opening PDF:", error);
+        });
+        
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          toast.success("Opening circular image...");
+        } else {
+          console.error("Failed to fetch image:", response.status);
           // Fallback to direct URL
           window.open(fileUrl, '_blank');
-          toast.success("Opening PDF circular...");
+          toast.success("Opening circular image...");
         }
-      } else if (['doc', 'docx'].includes(fileExtension)) {
-        // For Word documents, offer download option
-        if (window.confirm("Word documents cannot be previewed in browser. Would you like to download the file?")) {
-          await downloadCircularFile(fileUrl, circular.subject);
-        }
-      } else {
-        // For other file types, try to open in new tab
-        try {
-          const response = await fetch(fileUrl, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Client-Service': import.meta.env.VITE_CLIENT_SERVICE || 'COHAPPRT',
-              'Auth-Key': import.meta.env.VITE_AUTH_KEY || '4F21zrjoAASqz25690Zpqf67UyY',
-              'uid': uid,
-              'token': token,
-              'rurl': import.meta.env.VITE_RURL || 'etribes.ezcrm.site'
-            }
-          });
-          
-          if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            window.open(url, '_blank');
-            toast.success("Opening circular file...");
-          } else {
-            console.error("Failed to fetch file:", response.status);
-            // Fallback to direct URL
-            window.open(fileUrl, '_blank');
-            toast.success("Opening circular file...");
-          }
-        } catch (error) {
-          console.error("Error opening file:", error);
-          // Fallback to direct URL
-          window.open(fileUrl, '_blank');
-          toast.success("Opening circular file...");
-        }
+      } catch (error) {
+        console.error("Error opening image:", error);
+        // Fallback to direct URL
+        window.open(fileUrl, '_blank');
+        toast.success("Opening circular image...");
       }
     } catch (error) {
       console.error("Error opening circular file:", error);
@@ -544,10 +501,17 @@ export default function Circulars() {
         return;
       }
       
-      // Check file type
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+      // Check file type - only images allowed
+      const allowedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'image/bmp'
+      ];
       if (!allowedTypes.includes(file.type)) {
-        toast.error('Please select a valid file type (PDF, DOC, DOCX, or TXT)');
+        toast.error('Please select a valid image file type (JPG, PNG, GIF, WEBP, or BMP)');
         e.target.value = ''; // Clear the file input
         return;
       }
@@ -672,10 +636,17 @@ export default function Circulars() {
         return;
       }
       
-      // Check file type
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+      // Check file type - only images allowed
+      const allowedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'image/bmp'
+      ];
       if (!allowedTypes.includes(file.type)) {
-        toast.error('Please select a valid file type (PDF, DOC, DOCX, or TXT)');
+        toast.error('Please select a valid image file type (JPG, PNG, GIF, WEBP, or BMP)');
         e.target.value = ''; // Clear the file input
         return;
       }
@@ -1393,14 +1364,14 @@ export default function Circulars() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Upload File (Optional)
+                      Upload Image (Optional)
                     </label>
                     <div className="flex items-center gap-2">
                       <input
                         type="file"
                         name="file"
                         onChange={handleEditFormInputChange}
-                        accept=".pdf,.doc,.docx,.txt"
+                        accept=".jpg,.jpeg,.png,.gif,.webp,.bmp"
                         className="hidden"
                         id="editCircularFile"
                       />
@@ -1408,14 +1379,14 @@ export default function Circulars() {
                         htmlFor="editCircularFile"
                         className="px-4 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
                       >
-                        Choose File
+                        Choose Image
                       </label>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {editFormData.file ? editFormData.file.name : "No file chosen"}
+                        {editFormData.file ? editFormData.file.name : "No image chosen"}
                       </span>
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Maximum file size: 10MB. Supported formats: PDF, DOC, DOCX, TXT
+                      Maximum file size: 10MB. Supported formats: JPG, PNG, GIF, WEBP, BMP (Images only)
                     </p>
                   </div>
                 </div>
@@ -1524,14 +1495,14 @@ export default function Circulars() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Upload File (Optional)
+                      Upload Image (Optional)
                     </label>
                     <div className="flex items-center gap-2">
                       <input
                         type="file"
                         name="file"
                         onChange={handleAddFormInputChange}
-                        accept=".pdf,.doc,.docx,.txt"
+                        accept=".jpg,.jpeg,.png,.gif,.webp,.bmp"
                         className="hidden"
                         id="addCircularFile"
                       />
@@ -1539,14 +1510,14 @@ export default function Circulars() {
                         htmlFor="addCircularFile"
                         className="px-4 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
                       >
-                        Choose File
+                        Choose Image
                       </label>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {addFormData.file ? addFormData.file.name : "No file chosen"}
+                        {addFormData.file ? addFormData.file.name : "No image chosen"}
                       </span>
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Maximum file size: 10MB. Supported formats: PDF, DOC, DOCX, TXT
+                      Maximum file size: 10MB. Supported formats: JPG, PNG, GIF, WEBP, BMP (Images only)
                     </p>
                   </div>
                 </div>

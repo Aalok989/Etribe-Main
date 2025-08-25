@@ -533,7 +533,7 @@ export default function Attendance() {
               {/* Back to Events button when in specific event context */}
               {selectedEvent && (
                 <button
-                  onClick={() => navigate('/event-management/all')}
+                  onClick={() => navigate('/admin/all-events')}
                   className="flex items-center gap-1 bg-gray-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition"
                   title="Back to Events"
                 >
@@ -554,7 +554,7 @@ export default function Attendance() {
                 className="flex items-center gap-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition"
                 onClick={() => {
                   if (selectedEvent && selectedEvent.id) {
-                    navigate(`/attendance-list?eventId=${selectedEvent.id}&eventName=${encodeURIComponent(selectedEvent.title || selectedEvent.event || selectedEvent.name)}`);
+                    navigate(`/admin/attendance-list?eventId=${selectedEvent.id}&eventName=${encodeURIComponent(selectedEvent.title || selectedEvent.event || selectedEvent.name)}`);
                   } else {
                     toast.error("Please select an event first");
                   }
@@ -603,28 +603,28 @@ export default function Attendance() {
                     <td className="p-3 text-center">
                       <div className="flex items-center justify-center">
                         <div className="flex items-center gap-3">
-                          {/* Toggle Switch - Fixed Position */}
-                          <div className="relative inline-flex items-center">
-                            <input
-                              type="checkbox"
-                              className="sr-only peer"
-                              checked={member.is_attended}
-                              onChange={() => handleAttendanceToggle(member.id)}
-                              disabled={member.is_attended}
-                            />
-                            <div className={`w-11 h-6 rounded-full peer transition-all ${
+                          {/* Working Toggle Switch */}
+                          <button
+                            type="button"
+                            onClick={() => handleAttendanceToggle(member.id)}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
                               member.is_attended 
-                                ? 'bg-purple-400 peer-checked:bg-purple-400' // Light purple for attended
-                                : 'bg-gray-200 peer-checked:bg-gray-200' // Light gray for mark
-                            } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600`}>
-                            </div>
-                          </div>
+                                ? 'bg-purple-500' 
+                                : 'bg-gray-200 hover:bg-gray-300'
+                            }`}
+                          >
+                            <span
+                              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-all duration-300 ease-in-out ${
+                                member.is_attended ? 'translate-x-6' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
                           
-                          {/* Text Label - Fixed Width for Alignment */}
+                          {/* Text Label */}
                           <span className={`text-sm font-medium whitespace-nowrap min-w-[80px] text-left ${
                             member.is_attended 
-                              ? 'text-gray-500' // Lighter gray for "Attended"
-                              : 'text-gray-900 dark:text-gray-300' // Darker for "Mark"
+                              ? 'text-purple-600' 
+                              : 'text-gray-900 dark:text-gray-300'
                           }`}>
                             {member.is_attended ? 'Attended' : 'Mark'}
                           </span>
@@ -664,28 +664,28 @@ export default function Attendance() {
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">{member.plan}</span>
                       <div className="flex items-center gap-2">
-                        {/* Toggle Switch - Fixed Position */}
-                        <div className="relative inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="sr-only peer"
-                            checked={member.is_attended}
-                            onChange={() => handleAttendanceToggle(member.id)}
-                            disabled={member.is_attended}
-                          />
-                          <div className={`w-9 h-5 rounded-full peer transition-all ${
+                        {/* Working Toggle Switch */}
+                        <button
+                          type="button"
+                          onClick={() => handleAttendanceToggle(member.id)}
+                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 ${
                             member.is_attended 
-                              ? 'bg-purple-400 peer-checked:bg-purple-400' // Light purple for attended
-                              : 'bg-gray-200 peer-checked:bg-gray-200' // Light gray for mark
-                          } peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600`}>
-                          </div>
-                        </div>
+                              ? 'bg-purple-500' 
+                              : 'bg-gray-200 hover:bg-gray-300'
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-all duration-300 ease-in-out ${
+                              member.is_attended ? 'translate-x-5' : 'translate-x-1'
+                            }`}
+                          />
+                        </button>
                         
-                        {/* Text Label - Fixed Width for Alignment */}
+                        {/* Text Label */}
                         <span className={`text-xs font-medium whitespace-nowrap min-w-[60px] text-left ${
                           member.is_attended 
-                            ? 'text-gray-500' // Lighter gray for "Attended"
-                            : 'text-gray-300' // Darker for "Mark"
+                            ? 'text-purple-600' 
+                            : 'text-gray-900 dark:text-gray-300'
                         }`}>
                           {member.is_attended ? 'Attended' : 'Mark'}
                         </span>
