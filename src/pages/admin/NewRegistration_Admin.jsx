@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/admin/Layout/DashboardLayout";
 import { FiUser, FiMail, FiPhone, FiMapPin, FiHome, FiCalendar, FiSave, FiX, FiUpload, FiDownload } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 
 export default function NewRegistration() {
   const [formData, setFormData] = useState({
@@ -76,14 +77,7 @@ export default function NewRegistration() {
       const uid = localStorage.getItem("uid");
       
       const response = await api.post('/common/countries', {}, {
-        headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Content-Type': 'application/json',
-        }
+        headers: getAuthHeaders()
       });
       
       if (response.data && Array.isArray(response.data.data)) {
@@ -108,14 +102,7 @@ export default function NewRegistration() {
       const uid = localStorage.getItem("uid");
       
       const response = await api.post('/common/states', { country }, {
-        headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Content-Type': 'application/json',
-        }
+        headers: getAuthHeaders()
       });
       
       if (response.data && Array.isArray(response.data.data)) {
@@ -140,14 +127,7 @@ export default function NewRegistration() {
       const uid = localStorage.getItem("uid");
       
       const response = await api.post('/common/states', { country }, {
-        headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Content-Type': 'application/json',
-        }
+        headers: getAuthHeaders()
       });
       
       if (response.data && Array.isArray(response.data.data)) {
@@ -366,13 +346,8 @@ export default function NewRegistration() {
 
       const response = await api.post("/common/upload_excel_registration", formData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
       });
@@ -486,11 +461,7 @@ export default function NewRegistration() {
 
         const response = await api.get("/groupSettings/get_user_additional_fields", {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid,
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,
@@ -546,11 +517,7 @@ export default function NewRegistration() {
 
         const response = await api.post("/groupSettings/get_company_additional_fields", {}, {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid,
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,
@@ -699,13 +666,8 @@ export default function NewRegistration() {
 
       const response = await api.post("/common/registration", submissionData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
         withCredentials: true,
       });

@@ -20,6 +20,7 @@ import {
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -51,7 +52,6 @@ export default function GrievancesClosed() {
       toastShownRef.current = false;
       
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
       if (!token) {
         toast.error("Please log in to view grievances");
@@ -63,13 +63,8 @@ export default function GrievancesClosed() {
       
       const response = await api.get("/grievances/closedGrievances", {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+          "Authorization": `Bearer ${token}`
         },
       });
       
@@ -295,9 +290,8 @@ export default function GrievancesClosed() {
     try {
       setIsUpdatingStatus(true);
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
-      console.log('Status Update - Starting with:', { grievanceId, newStatus, token, uid });
+      console.log('Status Update - Starting with:', { grievanceId, newStatus, token });
       
       if (!token) {
         toast.error("Please log in to update grievance status");
@@ -311,11 +305,7 @@ export default function GrievancesClosed() {
       });
 
       const requestHeaders = {
-        "Client-Service": "COHAPPRT",
-        "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-        uid: uid || '1',
-        token: token,
-        rurl: "etribes.ezcrm.site",
+        ...getAuthHeaders(),
         "Authorization": `Bearer ${token}`,
         "Content-Type": "text/plain",
       };

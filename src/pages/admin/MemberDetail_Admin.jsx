@@ -403,11 +403,7 @@ export default function MemberDetail_Admin() {
 
       const response = await api.get(url, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid || '1',
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': `Bearer ${token}`,
         },
       });
@@ -1718,13 +1714,8 @@ export default function MemberDetail_Admin() {
       
       const response = await api.get(`/product/get_product_details_by_id/${memberId}`, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       });
       
@@ -1844,12 +1835,7 @@ export default function MemberDetail_Admin() {
           id: documentId.toString()
         }, {
           headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
             'Authorization': `Bearer ${token}`,
           },
         });
@@ -1859,12 +1845,7 @@ export default function MemberDetail_Admin() {
           id: documentId.toString()
         }, {
           headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
             'Authorization': `Bearer ${token}`,
           },
         });
@@ -1954,11 +1935,7 @@ export default function MemberDetail_Admin() {
 
       const response = await api.post(`/product/add_product_by_admin/${memberId || '1'}`, formData, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid || '1',
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': `Bearer ${token}`,
         },
         withCredentials: true,
@@ -2027,11 +2004,7 @@ export default function MemberDetail_Admin() {
 
       const response = await api.post('/userDetail/upload_profile_image', formData, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid || '1',
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': `Bearer ${token}`,
         },
         withCredentials: true,
@@ -2066,11 +2039,7 @@ export default function MemberDetail_Admin() {
 
       const response = await api.post('/userDetail/upload_company_logo', formData, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid || '1',
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': `Bearer ${token}`,
         },
         withCredentials: true,
@@ -2109,11 +2078,7 @@ export default function MemberDetail_Admin() {
         
         const response = await api.get('/payment_detail/getmodes', {
           headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid || '1',
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
+            ...getAuthHeaders(),
             'Authorization': `Bearer ${token}`,
           },
         });
@@ -2383,13 +2348,8 @@ export default function MemberDetail_Admin() {
           id: paymentId.toString()
         }, {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid || '1',
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         });
         

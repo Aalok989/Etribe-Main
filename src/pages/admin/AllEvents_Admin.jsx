@@ -27,6 +27,7 @@ import autoTable from "jspdf-autotable";
 import api from "../../api/axiosConfig";
 import RichTextEditor from "../../components/shared/RichTextEditor";
 import { toast } from "react-toastify";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 
 
 
@@ -85,14 +86,7 @@ export default function AllEvents() {
           "/event/index",
           {},
           {
-            headers: {
-              "Client-Service": "COHAPPRT",
-              "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-              uid: uid,
-              token: token,
-              rurl: "etribes.ezcrm.site",
-              "Content-Type": "application/json",
-            },
+            headers: getAuthHeaders()
           }
         );
         let backendEvents = [];
@@ -112,7 +106,7 @@ export default function AllEvents() {
         } else {
           backendEvents = [];
         }
-        const BASE_URL = "https://api.etribes.ezcrm.site";
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.etribes.ezcrm.site";
         const mappedEvents = backendEvents.map((e, idx) => ({
           id: e.id || idx,
           event: e.event_title || e.event || e.title || e.name || "",
@@ -261,11 +255,7 @@ export default function AllEvents() {
       await fetch("/api/event/add", {
         method: "POST",
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           Authorization: "Bearer " + (localStorage.getItem("authToken") || ""),
         },
         credentials: "include",
@@ -291,14 +281,7 @@ export default function AllEvents() {
           "/event/index",
           {},
           {
-            headers: {
-              "Client-Service": "COHAPPRT",
-              "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-              uid: uid,
-              token: token,
-              rurl: "etribes.ezcrm.site",
-              "Content-Type": "application/json",
-            },
+            headers: getAuthHeaders()
           }
         );
         let backendEvents = [];
@@ -318,7 +301,7 @@ export default function AllEvents() {
         } else {
           backendEvents = [];
         }
-        const BASE_URL = "https://api.etribes.ezcrm.site";
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.etribes.ezcrm.site";
         const mappedEvents = backendEvents.map((e, idx) => ({
           id: e.id || idx,
           event: e.event_title || e.event || e.title || e.name || "",
@@ -531,11 +514,7 @@ export default function AllEvents() {
       await fetch("/api/event/edit", {
         method: "POST",
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           Authorization: "Bearer " + (localStorage.getItem("authToken") || ""),
           // Do NOT set Content-Type for FormData
         },
@@ -552,14 +531,7 @@ export default function AllEvents() {
           "/event/index",
           {},
           {
-            headers: {
-              "Client-Service": "COHAPPRT",
-              "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-              uid: uid,
-              token: token,
-              rurl: "etribes.ezcrm.site",
-              "Content-Type": "application/json",
-            },
+            headers: getAuthHeaders()
           }
         );
         let backendEvents = [];
@@ -579,7 +551,7 @@ export default function AllEvents() {
         } else {
           backendEvents = [];
         }
-        const BASE_URL = "https://api.etribes.ezcrm.site";
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.etribes.ezcrm.site";
         const mappedEvents = backendEvents.map((e, idx) => ({
           id: e.id || idx,
           event: e.event_title || e.event || e.title || e.name || "",
@@ -617,11 +589,7 @@ export default function AllEvents() {
       await fetch("/api/event/remove", {
         method: "POST",
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Content-Type": "text/plain",
           Authorization: "Bearer " + (localStorage.getItem("authToken") || ""),
         },
@@ -637,14 +605,7 @@ export default function AllEvents() {
             "/event/index",
             {},
             {
-              headers: {
-                "Client-Service": "COHAPPRT",
-                "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-                uid: uid,
-                token: token,
-                rurl: "etribes.ezcrm.site",
-                "Content-Type": "application/json",
-              },
+              headers: getAuthHeaders()
             }
           );
           let backendEvents = [];
@@ -664,7 +625,7 @@ export default function AllEvents() {
           } else {
             backendEvents = [];
           }
-          const BASE_URL = "https://api.etribes.ezcrm.site";
+          const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.etribes.ezcrm.site";
           const mappedEvents = backendEvents.map((e, idx) => ({
             id: e.id || idx,
             event: e.event_title || e.event || e.title || e.name || "",

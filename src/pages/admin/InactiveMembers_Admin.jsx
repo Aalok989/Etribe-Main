@@ -25,6 +25,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import api from "../../api/axiosConfig";
 import { toast } from "react-toastify";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 
 export default function InactiveMembers() {
   const [members, setMembers] = useState([]);
@@ -93,13 +94,7 @@ export default function InactiveMembers() {
       }
 
       const response = await api.get('/userDetail/inactive_member', {
-        headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site'
-        }
+        headers: getAuthHeaders()
       });
 
       const data = response.data;

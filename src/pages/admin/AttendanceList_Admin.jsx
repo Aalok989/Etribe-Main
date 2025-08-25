@@ -19,6 +19,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import { toast } from "react-toastify";
 
 export default function AttendanceList() {
@@ -90,13 +91,8 @@ export default function AttendanceList() {
         event_id: selectedEventId
       }, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          ...getAuthHeaders(),
+          'Authorization': `Bearer ${token}`
         }
       });
 

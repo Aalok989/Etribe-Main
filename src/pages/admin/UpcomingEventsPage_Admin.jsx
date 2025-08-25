@@ -8,6 +8,7 @@ import autoTable from "jspdf-autotable";
 import api from "../../api/axiosConfig";
 import RichTextEditor from '../../components/shared/RichTextEditor';
 import { toast } from 'react-toastify';
+import { getAuthHeaders } from "../../utils/apiHeaders";
 
 
 // Helper to decode HTML entities
@@ -76,14 +77,7 @@ export default function UpcomingEventsPage() {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
         const response = await api.post('/event/future', {}, {
-          headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
-          }
+          headers: getAuthHeaders()
         });
         let backendEvents = [];
         if (Array.isArray(response.data?.data?.event)) {
@@ -238,11 +232,7 @@ export default function UpcomingEventsPage() {
       await fetch('/api/event/add', {
         method: 'POST',
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || ''),
         },
         credentials: 'include',
@@ -263,14 +253,7 @@ export default function UpcomingEventsPage() {
       setLoading(true);
       try {
         const response = await api.post('/event/future', {}, {
-          headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
-          }
+          headers: getAuthHeaders()
         });
         let backendEvents = [];
         if (Array.isArray(response.data?.data?.event)) {
@@ -435,11 +418,7 @@ export default function UpcomingEventsPage() {
       await fetch('/api/event/remove', {
         method: 'POST',
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Content-Type': 'text/plain',
           'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || ''),
         },
@@ -453,14 +432,7 @@ export default function UpcomingEventsPage() {
       setLoading(true);
       try {
         const response = await api.post('/event/future', {}, {
-          headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
-          }
+          headers: getAuthHeaders()
         });
         let backendEvents = [];
         if (Array.isArray(response.data?.data?.event)) {
@@ -577,11 +549,7 @@ export default function UpcomingEventsPage() {
       await fetch('/api/event/edit', {
         method: 'POST',
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || ''),
         },
         credentials: 'include',
@@ -594,14 +562,7 @@ export default function UpcomingEventsPage() {
       setLoading(true);
       try {
         const response = await api.post('/event/future', {}, {
-          headers: {
-            'Client-Service': 'COHAPPRT',
-            'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': 'etribes.ezcrm.site',
-            'Content-Type': 'application/json',
-          }
+          headers: getAuthHeaders()
         });
         let backendEvents = [];
         if (Array.isArray(response.data?.data?.event)) {

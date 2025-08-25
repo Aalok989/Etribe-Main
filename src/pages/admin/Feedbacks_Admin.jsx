@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/admin/Layout/DashboardLayout";
 import { FiSearch, FiRefreshCw, FiDownload, FiCopy, FiFile, FiChevronDown, FiChevronUp, FiChevronLeft, FiChevronRight, FiMessageSquare } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -43,13 +44,8 @@ export default function Feedbacks() {
       
       const response = await api.post("/attendance/get_feedback", {}, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+          "Authorization": `Bearer ${token}`
         },
       });
       

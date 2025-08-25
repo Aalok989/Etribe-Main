@@ -19,6 +19,7 @@ import {
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -68,14 +69,7 @@ export default function Resume() {
       console.log('Fetching resumes with credentials:', { uid, token });
       
       const response = await api.post("/resume", {}, {
-        headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders()
       });
       
       console.log('Resume API response:', response.data);
@@ -402,11 +396,7 @@ export default function Resume() {
 
       const response = await api.post("/resume/add", formData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
         },
         withCredentials: true,
@@ -567,14 +557,7 @@ export default function Resume() {
         }
 
         const response = await api.post(`/resume/delete`, { id }, {
-          headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid,
-            token: token,
-            rurl: "etribes.ezcrm.site",
-            "Content-Type": "application/json",
-          },
+          headers: getAuthHeaders()
         });
 
         if (response.data?.status === 'success' || response.data?.message) {

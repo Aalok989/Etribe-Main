@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/admin/Layout/DashboardLayout";
 import { FiSearch, FiRefreshCw, FiDownload, FiCopy, FiFile, FiChevronDown, FiChevronUp, FiChevronLeft, FiChevronRight, FiFileText, FiEye, FiEdit2, FiTrash2, FiX, FiCalendar, FiSettings } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -76,7 +77,6 @@ export default function Circulars() {
   const fetchCirculars = async () => {
     try {
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
       if (!token) {
         toast.error("Please log in to view circulars");
@@ -87,15 +87,7 @@ export default function Circulars() {
       console.log('Fetching circulars with credentials:', { uid, token });
       
       const response = await api.post("/notifications/get_all_circulars", {}, {
-        headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders()
       });
       
       console.log('Circulars API response:', response.data);
@@ -236,12 +228,8 @@ export default function Circulars() {
       const response = await fetch(fileUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Client-Service': import.meta.env.VITE_CLIENT_SERVICE || 'COHAPPRT',
-          'Auth-Key': import.meta.env.VITE_AUTH_KEY || '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': import.meta.env.VITE_RURL || 'etribes.ezcrm.site'
+          ...getAuthHeaders(),
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -312,9 +300,8 @@ export default function Circulars() {
       
       // Get authentication token
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
-      if (!token || !uid) {
+      if (!token) {
         toast.error("Authentication required to open files");
         return;
       }
@@ -324,12 +311,8 @@ export default function Circulars() {
         const response = await fetch(fileUrl, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Client-Service': import.meta.env.VITE_CLIENT_SERVICE || 'COHAPPRT',
-            'Auth-Key': import.meta.env.VITE_AUTH_KEY || '4F21zrjoAASqz25690Zpqf67UyY',
-            'uid': uid,
-            'token': token,
-            'rurl': import.meta.env.VITE_RURL || 'etribes.ezcrm.site'
+            ...getAuthHeaders(),
+            'Authorization': `Bearer ${token}`
           }
         });
         
@@ -393,9 +376,8 @@ export default function Circulars() {
 
     try {
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
-      if (!token || !uid) {
+      if (!token) {
         toast.error("Please log in to edit circulars");
         return;
       }
@@ -424,11 +406,7 @@ export default function Circulars() {
 
       const response = await api.post("/notifications/edit_circular", formData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
           // Don't set Content-Type for FormData - let browser set it with boundary
         },
@@ -537,9 +515,8 @@ export default function Circulars() {
     
     try {
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
-      if (!token || !uid) {
+      if (!token) {
         toast.error("Please log in to add circular");
         return;
       }
@@ -571,11 +548,7 @@ export default function Circulars() {
 
       const response = await api.post("/notifications/add_circular", formData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid,
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
         },
         withCredentials: true,
@@ -671,9 +644,8 @@ export default function Circulars() {
 
     try {
       const token = localStorage.getItem("token");
-      const uid = localStorage.getItem("uid");
       
-      if (!token || !uid) {
+      if (!token) {
         toast.error("Please log in to delete circulars");
         return;
       }
@@ -681,11 +653,7 @@ export default function Circulars() {
       console.log('=== DELETE CIRCULAR API CALL ===');
       console.log('Deleting circular ID:', id);
       console.log('Headers being sent:', {
-        "Client-Service": "COHAPPRT",
-        "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-        uid: uid,
-        token: token,
-        rurl: "etribes.ezcrm.site",
+        ...getAuthHeaders(),
         "Authorization": `Bearer ${token}`,
       });
 
@@ -694,11 +662,7 @@ export default function Circulars() {
       try {
         response = await api.delete(`/notifications/delete_circular/${id}`, {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid,
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,
@@ -715,11 +679,7 @@ export default function Circulars() {
         
         response = await api.post(`/notifications/delete_circular/${id}`, formData, {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid,
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,

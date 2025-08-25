@@ -19,6 +19,7 @@ import {
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -77,13 +78,8 @@ export default function PaymentDetails() {
       
       const response = await api.post("/payment_detail", {}, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       });
       
@@ -224,13 +220,8 @@ export default function PaymentDetails() {
       
       const response = await api.post("/payment_detail/getbankdetails", {}, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       });
       
@@ -481,13 +472,8 @@ export default function PaymentDetails() {
           id: id.toString()
         }, {
           headers: {
-            "Client-Service": "COHAPPRT",
-            "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-            uid: uid || '1',
-            token: token,
-            rurl: "etribes.ezcrm.site",
+            ...getAuthHeaders(),
             "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         });
         
@@ -637,13 +623,8 @@ export default function PaymentDetails() {
       // Make API call to update payment details using the correct endpoint
       const response = await api.post("/payment_detail/edit", updateData, {
         headers: {
-          "Client-Service": "COHAPPRT",
-          "Auth-Key": "4F21zrjoAASqz25690Zpqf67UyY",
-          uid: uid || '1',
-          token: token,
-          rurl: "etribes.ezcrm.site",
+          ...getAuthHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "text/plain",
         },
       });
       

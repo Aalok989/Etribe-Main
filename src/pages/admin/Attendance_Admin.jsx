@@ -23,6 +23,7 @@ import {
 } from "react-icons/fi";
 
 import api from "../../api/axiosConfig";
+import { getAuthHeaders } from "../../utils/apiHeaders";
 import { toast } from "react-toastify";
 
 export default function Attendance() {
@@ -125,13 +126,8 @@ export default function Attendance() {
       // Fetch ALL active members from the API
       const response = await api.get('/attendance/get_active_members', {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          ...getAuthHeaders(),
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -206,13 +202,8 @@ export default function Attendance() {
         event_id: eventId
       }, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          ...getAuthHeaders(),
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -330,11 +321,7 @@ export default function Attendance() {
         user_id: memberId
       }, {
         headers: {
-          'Client-Service': 'COHAPPRT',
-          'Auth-Key': '4F21zrjoAASqz25690Zpqf67UyY',
-          'uid': uid,
-          'token': token,
-          'rurl': 'etribes.ezcrm.site',
+          ...getAuthHeaders(),
           'Authorization': `Bearer ${token}`
         }
       });

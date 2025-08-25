@@ -150,22 +150,6 @@ export default function Calendar() {
   const [showEditEventModal, setShowEditEventModal] = useState(false);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // Fetch event counts from backend endpoints
   useEffect(() => {
     const fetchCounts = async () => {
