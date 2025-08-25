@@ -143,10 +143,9 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // No need to clear error with toast
     
-    const username = e.target.email.value; // Using email field as username per API
-    const password = e.target.password.value;
+    const username = (e.target.email.value || '').trim();
+    const password = (e.target.password.value || '').trim();
     
     // Basic validation
     if (!username || !password) {
@@ -159,67 +158,85 @@ const Login = () => {
       const response = await api.post('/common/login', { username, password });
       console.log('Login response:', response.data);
       
-      if (response.data?.token) {
-        localStorage.setItem('token', response.data.token);
-        // Store uid as well
-        if (response.data.data?.id) {
-          localStorage.setItem('uid', response.data.data.id);
+      const data = response.data || {};
+
+      // Success path: token present
+      if (data?.token) {
+        localStorage.setItem('token', data.token);
+        
+        // Robust UID extraction across possible shapes
+        const userData = data.data || data.user || {};
+        const uidCandidate = userData.id ?? userData.user_id ?? data.user_id ?? data.id;
+        if (uidCandidate) {
+          localStorage.setItem('uid', String(uidCandidate));
         }
         
         // Determine user role based on response data
-        const userData = response.data.data || {};
-        let userRole = "user"; // Default to user
-        
-        console.log('User data for role detection:', userData);
-        console.log('Username:', username);
-        console.log('UID:', userData.id);
-        
-        // Priority 1: Check if this is an admin user based on response data
-        if (userData.role === "admin" || 
-            userData.user_type === "admin" || 
-            userData.is_admin === true ||
-            userData.admin === true ||
-            userData.type === "admin" ||
-            userData.user_role === "admin") {
-          userRole = "admin";
-          console.log('Role detected as admin from userData');
+        let userRole = 'user';
+        const u = userData;
+        if (
+          u?.role === 'admin' ||
+          u?.user_type === 'admin' ||
+          u?.is_admin === true ||
+          u?.admin === true ||
+          u?.type === 'admin' ||
+          u?.user_role === 'admin'
+        ) {
+          userRole = 'admin';
+        } else if (String(uidCandidate) === '1') {
+          userRole = 'admin';
+        } else if (username.includes('admin') || username.includes('@admin') || username === 'admin') {
+          userRole = 'admin';
         }
         
-        // Priority 2: Check by specific UID (uid: 1 is always admin)
-        else if (userData.id === 1 || userData.id === "1") {
-          userRole = "admin";
-          console.log('Role detected as admin from UID:', userData.id);
-        }
-        
-        // Priority 3: Check by username patterns
-        else if (username.includes('admin') || username.includes('@admin') || username === 'admin') {
-          userRole = "admin";
-          console.log('Role detected as admin from username pattern');
-        }
-        
-        console.log('Final detected role:', userRole);
-        
-        localStorage.setItem("userRole", userRole);
-        
+        localStorage.setItem('userRole', userRole);
         toast.success(`${userRole === 'admin' ? 'Admin' : 'User'} login successful!`);
         
         // Redirect based on role
-        if (userRole === "admin") {
-          navigate("/admin/dashboard");
+        if (userRole === 'admin') {
+          navigate('/admin/dashboard');
         } else {
-          navigate("/user/dashboard");
+          navigate('/user/dashboard');
         }
         
-        // Dispatch login event immediately after navigation for fastest loading
         setTimeout(() => {
           window.dispatchEvent(new Event('login'));
         }, 50);
+        return;
+      }
+
+      // No token returned: show backend message if available
+      const backendMessage = data?.message || data?.error || data?.msg;
+      if (backendMessage) {
+        toast.error(backendMessage);
       } else {
         toast.error('Invalid email or password.');
       }
     } catch (err) {
       console.error('Login error:', err);
-      toast.error('An error occurred. Please try again.');
+      const status = err.response?.status;
+      const respData = err.response?.data;
+
+      // Extract meaningful backend messages
+      const backendMessage =
+        respData?.message ||
+        respData?.error ||
+        respData?.msg ||
+        (Array.isArray(respData?.errors) ? respData.errors.join(', ') : undefined);
+
+      if (backendMessage) {
+        toast.error(backendMessage);
+      } else if (status === 401 || status === 403) {
+        toast.error('Unauthorized. Please check your credentials.');
+      } else if (status === 429) {
+        toast.error('Too many attempts. Please try again later.');
+      } else if (status >= 500) {
+        toast.error('Server error. Please try again later.');
+      } else if (err.message === 'Network Error') {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

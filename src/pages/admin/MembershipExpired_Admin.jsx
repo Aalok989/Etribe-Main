@@ -71,6 +71,7 @@ const getMemberTableHeaders = (additionalFields = []) => {
   const headers = [
     { key: 'sr', name: 'SR No', sortable: true, width: '60px' },
     { key: 'name', name: 'Name', sortable: true, width: '120px' },
+    { key: 'email', name: 'Email', sortable: true, width: '180px' },
     { key: 'contact', name: 'Contact', sortable: true, width: '120px' },
     { key: 'address', name: 'Address', sortable: true, width: '200px' },
     { key: 'pan', name: 'PAN No', sortable: true, width: '120px' },
@@ -80,7 +81,12 @@ const getMemberTableHeaders = (additionalFields = []) => {
     { key: 'actions', name: 'Actions', sortable: false, width: '120px' }
   ];
 
-  return headers;
+  // Merge with any additional selectable fields
+  const additionalHeaders = additionalFields
+    .filter(field => !headers.some(h => h.key === field.key))
+    .map(field => ({ key: field.key, name: field.label || field.key, sortable: true, width: field.width || '140px' }));
+
+  return [...headers, ...additionalHeaders];
 };
 
 // Get mobile card fields for member pages
@@ -1056,6 +1062,12 @@ export default function MembershipExpired() {
                             {m.phone_num || m.contact}
                           </td>
                         );
+                      } else if (header.key === 'email') {
+                        return (
+                          <td key={header.key} className="p-3 text-left border-r border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100">
+                            {m.email || '-'}
+                          </td>
+                        );
                       } else if (header.key === 'address') {
                         return (
                           <td key={header.key} className="p-3 text-left border-r border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100">
@@ -1154,6 +1166,12 @@ export default function MembershipExpired() {
                         <FiPhone className="text-gray-400 flex-shrink-0" size={14} />
                         <span className="text-gray-700 dark:text-gray-300 truncate">{member.phone_num || member.contact || 'No contact'}</span>
                       </div>
+                      {member.email && (
+                        <div className="flex items-center gap-2">
+                          <FiMail className="text-gray-400 flex-shrink-0" size={14} />
+                          <span className="text-gray-700 dark:text-gray-300 truncate">{member.email}</span>
+                        </div>
+                      )}
                       {member.address && (
                         <div className="flex items-start gap-2">
                           <FiMapPin className="text-gray-400 flex-shrink-0 mt-0.5" size={14} />

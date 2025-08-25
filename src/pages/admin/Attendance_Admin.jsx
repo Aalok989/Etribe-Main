@@ -383,6 +383,91 @@ export default function Attendance() {
     }
   };
 
+  // Mark all members as attended
+  const handleMarkAllAttendance = async () => {
+    try {
+      // Get eventId from URL parameters
+      const searchParams = new URLSearchParams(location.search);
+      const eventId = searchParams.get('eventId');
+      
+      if (!eventId) {
+        toast.error("Event ID not found");
+        return;
+      }
+
+      // Get auth headers from localStorage
+      const uid = localStorage.getItem('uid');
+      const token = localStorage.getItem('token');
+      
+      if (!uid || !token) {
+        toast.error("Authentication required");
+        return;
+      }
+
+      // Get all unmarked members
+      const unmarkedMembers = members.filter(member => !member.is_attended);
+      
+      if (unmarkedMembers.length === 0) {
+        toast.info("All members are already marked as attended!");
+        return;
+      }
+
+      // Show confirmation dialog
+      const confirmed = window.confirm(
+        `Are you sure you want to mark ${unmarkedMembers.length} members as attended for this event?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      setLoading(true);
+      
+      // Use the bulk attendance API endpoint
+      const response = await api.post('/attendance/add_all_attendance', {
+        event_id: eventId
+      }, {
+        headers: {
+          ...getAuthHeaders(),
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log('Bulk Attendance API Response:', response);
+      const data = response.data;
+
+      if (data.status === true) {
+        // Update local state to mark all members as attended
+        setMembers(prev => prev.map(member => ({
+          ...member,
+          is_attended: true
+        })));
+        
+        toast.success(`Successfully marked all ${unmarkedMembers.length} members as attended!`);
+      } else {
+        toast.error(data.message || "Failed to mark all attendance");
+      }
+    } catch (error) {
+      console.error("Failed to mark all attendance:", error);
+      console.error("Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers
+      });
+      
+      if (error.response?.data?.message) {
+        toast.error(`API Error: ${error.response.data.message}`);
+      } else if (error.response?.status) {
+        toast.error(`HTTP Error: ${error.response.status}`);
+      } else {
+        toast.error("Failed to mark all attendance. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Add Attendance Modal
   const openAddAttendanceModal = () => {
     setAddAttendanceForm({
@@ -525,6 +610,19 @@ export default function Attendance() {
                   title="Back to Events"
                 >
                   ← Back to Events
+                </button>
+              )}
+              
+              {/* Mark All Attendance Button */}
+              {selectedEvent && (
+                <button
+                  onClick={handleMarkAllAttendance}
+                  disabled={loading}
+                  className="flex items-center gap-1 bg-purple-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  title="Mark All Members as Attended"
+                >
+                  <FiUserCheck />
+                  <span>Mark All</span>
                 </button>
               )}
               

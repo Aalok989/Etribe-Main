@@ -1,13 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/admin/Layout/DashboardLayout";
-import { FiPlus, FiFileText, FiFile, FiEye, FiX, FiCalendar, FiMapPin, FiClock, FiSearch, FiFilter, FiDownload, FiCopy, FiEdit2, FiTrash2, FiRefreshCw, FiImage, FiTrendingUp, FiCheckCircle, FiUpload } from "react-icons/fi";
+import {
+  FiPlus,
+  FiFileText,
+  FiFile,
+  FiEye,
+  FiX,
+  FiCalendar,
+  FiMapPin,
+  FiClock,
+  FiSearch,
+  FiFilter,
+  FiDownload,
+  FiCopy,
+  FiEdit2,
+  FiTrash2,
+  FiRefreshCw,
+  FiImage,
+  FiCheckCircle,
+  FiUpload,
+  FiTrendingUp,
+} from "react-icons/fi";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import api from "../../api/axiosConfig";
-import RichTextEditor from '../../components/shared/RichTextEditor';
-import { toast } from 'react-toastify';
+import RichTextEditor from "../../components/shared/RichTextEditor";
+import UploadAttendanceModal from "../../components/admin/UploadAttendanceModal";
+import { toast } from "react-toastify";
 import { getAuthHeaders } from "../../utils/apiHeaders";
 
 
@@ -36,6 +57,8 @@ export default function UpcomingEventsPage() {
   const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [showViewEventModal, setShowViewEventModal] = useState(false);
   const [selectedEventIdx, setSelectedEventIdx] = useState(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedEventForUpload, setSelectedEventForUpload] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [addEventForm, setAddEventForm] = useState({
     event: "",
@@ -398,10 +421,19 @@ export default function UpcomingEventsPage() {
     navigate(`/admin/attendance?eventId=${eventId}&eventName=${encodeURIComponent(eventName)}`);
   };
 
-  const handleUploadAttendance = (eventId) => {
-    // TODO: Implement upload attendance functionality
-    console.log('Upload attendance for event:', eventId);
-    toast.info('Upload attendance functionality coming soon!');
+  const handleUploadAttendance = (eventId, eventName) => {
+    setSelectedEventForUpload({ id: eventId, name: eventName });
+    setShowUploadModal(true);
+  };
+
+  const closeUploadModal = () => {
+    setShowUploadModal(false);
+    setSelectedEventForUpload(null);
+  };
+
+  const handleUploadSuccess = () => {
+    // Refresh events list if needed
+    fetchEvents();
   };
 
   const handleRefresh = () => {
@@ -791,7 +823,7 @@ export default function UpcomingEventsPage() {
                         <button
                           className="text-purple-600 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-400 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700 transition-colors"
                           title="Upload Attendance"
-                          onClick={() => handleUploadAttendance(event.id)}
+                          onClick={() => handleUploadAttendance(event.id, event.event)}
                         >
                           <FiUpload size={16} />
                         </button>
@@ -867,7 +899,7 @@ export default function UpcomingEventsPage() {
                     Mark
                   </button>
                   <button
-                    onClick={() => handleUploadAttendance(event.id)}
+                    onClick={() => handleUploadAttendance(event.id, event.event)}
                     className="flex items-center gap-1 text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 transition-colors text-sm px-3 py-2 rounded-lg hover:bg-purple-50 dark:hover:bg-gray-700"
                   >
                     <FiUpload size={14} />
@@ -1290,6 +1322,15 @@ export default function UpcomingEventsPage() {
             </div>
           </div>
         )}
+
+        {/* Upload Attendance Modal */}
+        <UploadAttendanceModal
+          isOpen={showUploadModal}
+          onClose={closeUploadModal}
+          eventId={selectedEventForUpload?.id}
+          eventName={selectedEventForUpload?.name}
+          onSuccess={handleUploadSuccess}
+        />
       </div>
     </DashboardLayout>
   );
